@@ -1,0 +1,288 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AgentStatus {
+  IDLE
+  ASSIGNED
+  THINKING
+  WORKING
+  WAITING_APPROVAL
+  COMPLETED
+  BLOCKED
+  ESCALATED
+  FAILED
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELED
+  EXPIRED
+}
+
+enum IncidentStatus {
+  OPEN
+  INVESTIGATING
+  WAITING_APPROVAL
+  MITIGATING
+  RESOLVED
+  CLOSED
+}
+
+enum CouncilType {
+  WAR
+  OPPORTUNITY
+}
+
+model Company {
+  id          String       @id @default(cuid())
+  name        String
+  slug        String       @unique
+  description String?
+  icon        String?
+  status      String       @default("Operational")
+  departments Department[]
+  agents      Agent[]
+  tasks       Task[]
+  incidents   Incident[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Department {
+  id        String    @id @default(cuid())
+  companyId String
+  company   Company   @relation(fields: [companyId], references: [id])
+  name      String
+  kind      String
+  agents    Agent[]
+  tasks     Task[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Agent {
+  id             String      @id @default(cuid())
+  companyId      String
+  departmentId   String?
+  company        Company     @relation(fields: [companyId], references: [id])
+  department     Department? @relation(fields: [departmentId], references: [id])
+  name           String
+  role           String
+  status         AgentStatus @default(IDLE)
+  autonomyLevel  Int         @default(2)
+  currentTask    String?
+  modelProfile   String?
+  toolProfile    String?
+  costBudgetCents Int        @default(0)
+  qualityScore   Float       @default(0)
+  heartbeatAt    DateTime?
+  tasks          Task[]
+  events         Event[]
+  approvals      ApprovalRequest[]
+  auditLogs      AuditLog[]
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}
+
+model Task {
+  id             String      @id @default(cuid())
+  companyId      String
+  departmentId   String?
+  agentId        String?
+  company        Company     @relation(fields: [companyId], references: [id])
+  department     Department? @relation(fields: [departmentId], references: [id])
+  agent          Agent?      @relation(fields: [agentId], references: [id])
+  title          String
+  goal           String?
+  status         String      @default("queued")
+  priority       Int         @default(3)
+  riskLevel      RiskLevel   @default(LOW)
+  dueAt          DateTime?
+  resultSummary  String?
+  artifactUrl    String?
+  events         Event[]
+  approvals      ApprovalRequest[]
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}
+
+model Event {
+  id        String   @id @default(cuid())
+  type      String
+  message   String
+  metadata  Json?
+  agentId   String?
+  taskId    String?
+  agent     Agent?   @relation(fields: [agentId], references: [id])
+  task      Task?    @relation(fields: [taskId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model ApprovalRequest {
+  id              String         @id @default(cuid())
+  requestingAgentId String?
+  taskId          String?
+  requestingAgent Agent?         @relation(fields: [requestingAgentId], references: [id])
+  task            Task?          @relation(fields: [taskId], references: [id])
+  action          String
+  riskReason      String
+  riskLevel       RiskLevel      @default(HIGH)
+  affectedSystem  String?
+  proposedPlan    String?
+  status          ApprovalStatus @default(PENDING)
+  decidedBy       String?
+  decidedAt       DateTime?
+  decisionNotes   String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+}
+
+model Client {
+  id        String   @id @default(cuid())
+  name      String
+  sites     Site[]
+  incidents Incident[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Site {
+  id        String   @id @default(cuid())
+  clientId  String
+  client    Client   @relation(fields: [clientId], references: [id])
+  name      String
+  address   String?
+  incidents Incident[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Connector {
+  id        String   @id @default(cuid())
+  name      String
+  kind      String
+  status    String   @default("configured")
+  config    Json?
+  incidents Incident[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Incident {
+  id          String         @id @default(cuid())
+  companyId   String?
+  clientId    String?
+  siteId      String?
+  connectorId String?
+  company     Company?       @relation(fields: [companyId], references: [id])
+  client      Client?        @relation(fields: [clientId], references: [id])
+  site        Site?          @relation(fields: [siteId], references: [id])
+  connector   Connector?     @relation(fields: [connectorId], references: [id])
+  title       String
+  severity    RiskLevel      @default(MEDIUM)
+  status      IncidentStatus @default(OPEN)
+  evidence    Json?
+  recommendation String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model CouncilSession {
+  id              String      @id @default(cuid())
+  type            CouncilType
+  topic           String
+  context         String?
+  status          String      @default("open")
+  consensus       String?
+  recommendation  String?
+  humanRequired   Boolean     @default(false)
+  participants    CouncilParticipant[]
+  votes           CouncilVote[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model CouncilParticipant {
+  id          String         @id @default(cuid())
+  sessionId   String
+  session     CouncilSession @relation(fields: [sessionId], references: [id])
+  persona     String
+  position    String?
+  openingNote String?
+  createdAt   DateTime       @default(now())
+}
+
+model CouncilVote {
+  id        String         @id @default(cuid())
+  sessionId String
+  session   CouncilSession @relation(fields: [sessionId], references: [id])
+  voter     String
+  vote      String
+  score     Float?
+  rationale String?
+  createdAt DateTime       @default(now())
+}
+
+model Opportunity {
+  id                  String    @id @default(cuid())
+  title               String
+  market              String?
+  targetCustomer      String?
+  monetizationPath    String?
+  automationPotential Float     @default(0)
+  profitPotential     Float     @default(0)
+  startupCostCents    Int       @default(0)
+  riskScore           Float     @default(0)
+  confidenceScore     Float     @default(0)
+  status              String    @default("researching")
+  nextAction          String?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+}
+
+model PolicyRule {
+  id                String    @id @default(cuid())
+  name              String
+  actionPattern     String
+  maxAutonomyLevel  Int       @default(2)
+  requiresApproval  Boolean   @default(true)
+  budgetLimitCents  Int?
+  enabled           Boolean   @default(true)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorType String
+  actorId   String?
+  agent     Agent?   @relation(fields: [actorId], references: [id])
+  action    String
+  target    String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+}
+
+model MemoryRecord {
+  id        String   @id @default(cuid())
+  scope     String
+  key       String
+  value     Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

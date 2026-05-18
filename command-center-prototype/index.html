@@ -30,8 +30,8 @@
     <div class="stats-grid">
       <div class="stat-card"><div class="stat-label">Prototype</div><div class="stat-value">Live</div><div class="stat-trend positive">Clickable preview running</div></div>
       <div class="stat-card"><div class="stat-label">GitHub</div><div class="stat-value">Live</div><div class="stat-trend positive">sdmactech/AICC main initialized</div></div>
-      <div class="stat-card"><div class="stat-label">Jira</div><div class="stat-value">Not Connected</div><div class="stat-trend negative">MCP provider unavailable</div></div>
-      <div class="stat-card"><div class="stat-label">Slack</div><div class="stat-value">Not Connected</div><div class="stat-trend negative">MCP provider unavailable</div></div>
+      <div class="stat-card"><div class="stat-label">Jira</div><div class="stat-value">Connected</div><div class="stat-trend negative">Read OK; create tool timeout isolated</div></div>
+      <div class="stat-card"><div class="stat-label">Slack</div><div class="stat-value">Posted</div><div class="stat-trend positive">new-channel updated</div></div>
       <div class="stat-card"><div class="stat-label">Next Milestone</div><div class="stat-value">Roadmap</div><div class="stat-trend neutral">Architecture + scaffold</div></div>
     </div>
     <div class="main-grid">
@@ -46,11 +46,11 @@
         </div>
       </div>
       <div class="card"><div class="card-title">External Tracking Status</div>
-        <div class="list"><div>✅ GitHub repo initialized: <b>sdmactech/AICC</b></div><div>✅ Default branch confirmed: <b>main</b></div><div>✅ 8 GitHub issues created for workstreams</div><div>⚠️ Jira MCP service not connected</div><div>⚠️ Slack MCP service not connected</div><div>✅ Prototype URL active</div></div>
+        <div class="list"><div>✅ GitHub repo initialized: <b>sdmactech/AICC</b></div><div>✅ Default branch confirmed: <b>main</b></div><div>✅ 8 GitHub issues created for workstreams</div><div>⚠️ Jira read access verified; jira_create_issue times out on Task, Story, invalid-project, and explicit-field tests</div><div>✅ Slack status posted to <b>new-channel</b></div><div>✅ Prototype URL active</div></div>
         <div class="approval-actions"><a class="btn btn-primary btn-sm" href="https://github.com/sdmactech/AICC" target="_blank">Open GitHub Repo</a><a class="btn btn-ghost btn-sm" href="https://github.com/sdmactech/AICC/issues" target="_blank">Open GitHub Issues</a><button class="btn btn-ghost btn-sm">Generate Slack Update</button></div>
       </div>
     </div>
-    <div class="card"><div class="card-title">Suggested Jira Epics / Tickets</div><div class="roadmap">
+    <div class="card"><div class="card-title">Jira Remediation Queue / Future Epics</div><div class="roadmap">
       <div><b>EPIC-1 Frontend App Shell</b><p>Next.js app, Company Map, floor view, agent inspector, dashboard.</p></div>
       <div><b>EPIC-2 Backend Foundation</b><p>Database schema, API, event log, auth, seed data.</p></div>
       <div><b>EPIC-3 Agent Runtime</b><p>Mock agents, heartbeat, tasks, lifecycle, events.</p></div>
@@ -64,7 +64,7 @@ Prototype: Live and clickable.
 Current focus: Sprint 0 foundation and architecture.
 Completed: Company Map, immersive company floors, pixel-art agents, desks, governance tab, build plan, approval inbox.
 Next: convert to real app, define DB/API schema, create mock agent runtime, integrate first monitoring connector.
-Completed: GitHub repo initialized and workstream issues created. Blockers: Jira/Slack providers not connected in MCP environment.</pre></div>
+Completed: GitHub repo initialized, workstream issues created, Slack status posted to new-channel, and Jira diagnostics completed. Blocker: jira_create_issue times out even with minimal payloads; GitHub Issues remains active tracker until Jira MCP create path is fixed.</pre></div>
   </div>
 </section>
 
