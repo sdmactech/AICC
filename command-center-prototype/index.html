@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Empire Command Center</title>
+<link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+<header><div class="logo">🏛️ AI Empire Command Center</div><div class="top-meta"><span class="badge badge-success">Empire Online</span><span id="clock"></span></div></header>
+<nav class="nav-tabs">
+<button class="nav-tab active" data-view="map">Company Map</button><button class="nav-tab" data-view="project-ops">Project Ops</button><button class="nav-tab" data-view="dashboard">Dashboard</button><button class="nav-tab" data-view="governance">Governance</button><button class="nav-tab" data-view="build">Build Plan</button><button class="nav-tab" data-view="approvals">Approval Inbox</button><button class="nav-tab" data-view="agents">Agent Registry</button>
+</nav>
+<main>
+<section id="view-map" class="view-section active">
+<div class="card hero-card"><div class="card-header"><div><div class="card-title">Living AI Company Map</div><div class="card-subtitle">Enter each company building to see departments, desks, agents, incidents, councils, and approval queues.</div></div><div class="legend"><span><i class="dot work"></i>Working</span><span><i class="dot think"></i>Thinking</span><span><i class="dot wait"></i>Approval</span><span><i class="dot alert"></i>Incident</span><span><i class="dot block"></i>Blocked</span></div></div>
+<div id="empire" class="empire-grid"></div>
+<div id="floorMode" class="floor-mode hidden">
+<div class="floor-top"><button class="btn btn-ghost" onclick="backToEmpire()">← Back to Empire Map</button><div><h2 id="floorName"></h2><p id="floorDesc"></p></div><span id="floorBadge" class="badge badge-success"></span></div>
+<div class="command-bar"><button class="btn btn-primary">Assign Goal</button><button class="btn btn-ghost">Create Agent</button><button class="btn btn-ghost">Summon Council</button><button class="btn btn-ghost">Review Incidents</button><button class="btn btn-ghost">Open Logs</button><button class="btn btn-danger">Pause Company</button></div>
+<div class="floor-layout"><div id="rooms" class="rooms"></div><aside class="inspector"><h3>Inspector</h3><div id="inspect"><div class="big-icon">🏢</div><h4>Select a room or agent</h4><p>Click any department, desk, or pixel agent to drill into work status and controls.</p></div><div class="lifecycle"><h4>Agent Lifecycle</h4><div class="life"><span>Idle</span><b>→</b><span>Assigned</span><b>→</b><span>Thinking</span><b>→</b><span>Working</span><b>→</b><span>Approval</span><b>→</b><span>Done / Blocked</span></div></div></aside></div>
+</div></div>
+</section>
+
+<section id="view-project-ops" class="view-section">
+  <div class="card hero-card">
+    <div class="card-header">
+      <div><div class="card-title">Project Ops: Command Center Build Status</div><div class="card-subtitle">Live execution board for building the AI Empire Command Center itself.</div></div>
+      <span class="badge badge-warning">Sprint 0 / Build Foundation</span>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-label">Prototype</div><div class="stat-value">Live</div><div class="stat-trend positive">Clickable preview running</div></div>
+      <div class="stat-card"><div class="stat-label">Git</div><div class="stat-value">Local</div><div class="stat-trend neutral">Repo exists; no GitHub remote yet</div></div>
+      <div class="stat-card"><div class="stat-label">Jira</div><div class="stat-value">Not Connected</div><div class="stat-trend negative">MCP provider unavailable</div></div>
+      <div class="stat-card"><div class="stat-label">Slack</div><div class="stat-value">Not Connected</div><div class="stat-trend negative">MCP provider unavailable</div></div>
+      <div class="stat-card"><div class="stat-label">Next Milestone</div><div class="stat-value">Roadmap</div><div class="stat-trend neutral">Architecture + scaffold</div></div>
+    </div>
+    <div class="main-grid">
+      <div class="card"><div class="card-title">Parallel Workstreams</div>
+        <div class="ops-board">
+          <div><b>Frontend Command Center</b><p>Convert prototype into data-driven Next.js app with Company Map, floors, approvals, dashboard, governance.</p><span class="badge badge-info">Ready</span></div>
+          <div><b>Backend + Database</b><p>Postgres schema, APIs, event log, companies, departments, agents, tasks, incidents, approvals, councils.</p><span class="badge badge-info">Ready</span></div>
+          <div><b>Agent Runtime</b><p>Mock agents first: heartbeats, task lifecycle, event emission, approval-gated tool wrapper.</p><span class="badge badge-info">Ready</span></div>
+          <div><b>Monitoring Integrations</b><p>Microsoft 365 first; OVRC/Eero next depending on API/webhook/email access.</p><span class="badge badge-warning">Needs Credentials/API Research</span></div>
+          <div><b>Governance/Safety</b><p>Approval rules, budgets, tool permissions, audit trail, sensitive action classifier.</p><span class="badge badge-info">Ready</span></div>
+          <div><b>Councils</b><p>War Council and Opportunity Council debate sessions, voting, consensus, recommendation reports.</p><span class="badge badge-info">Ready</span></div>
+        </div>
+      </div>
+      <div class="card"><div class="card-title">External Tracking Status</div>
+        <div class="list"><div>✅ Local Git repo detected on branch <b>master</b></div><div>⚠️ No GitHub remote configured yet</div><div>⚠️ Jira MCP service not connected</div><div>⚠️ Slack MCP service not connected</div><div>✅ Prototype URL active</div></div>
+        <div class="approval-actions"><button class="btn btn-primary btn-sm">Prepare GitHub Push</button><button class="btn btn-ghost btn-sm">Generate Jira Epics</button><button class="btn btn-ghost btn-sm">Generate Slack Update</button></div>
+      </div>
+    </div>
+    <div class="card"><div class="card-title">Suggested Jira Epics / Tickets</div><div class="roadmap">
+      <div><b>EPIC-1 Frontend App Shell</b><p>Next.js app, Company Map, floor view, agent inspector, dashboard.</p></div>
+      <div><b>EPIC-2 Backend Foundation</b><p>Database schema, API, event log, auth, seed data.</p></div>
+      <div><b>EPIC-3 Agent Runtime</b><p>Mock agents, heartbeat, tasks, lifecycle, events.</p></div>
+      <div><b>EPIC-4 Approval/Governance</b><p>Rules engine, approval queue, audit logs, tool policies.</p></div>
+      <div><b>EPIC-5 Monitoring Connectors</b><p>M365, OVRC, Eero, normalized incidents.</p></div>
+      <div><b>EPIC-6 Councils</b><p>War Council, Opportunity Council, debate orchestration.</p></div>
+    </div></div>
+    <div class="card"><div class="card-title">Prepared Slack Status Update</div><pre class="status-update">AI Empire Command Center — Status Update
+
+Prototype: Live and clickable.
+Current focus: Sprint 0 foundation and architecture.
+Completed: Company Map, immersive company floors, pixel-art agents, desks, governance tab, build plan, approval inbox.
+Next: convert to real app, define DB/API schema, create mock agent runtime, integrate first monitoring connector.
+Blockers: GitHub remote not configured; Jira/Slack providers not connected in MCP environment.</pre></div>
+  </div>
+</section>
+
+<section id="view-dashboard" class="view-section"><div class="stats-grid"><div class="stat-card"><div class="stat-label">Companies</div><div class="stat-value">5</div><div class="stat-trend positive">All divisions mapped</div></div><div class="stat-card"><div class="stat-label">Agents Online</div><div class="stat-value">64</div><div class="stat-trend positive">13 departments</div></div><div class="stat-card"><div class="stat-label">Approvals</div><div class="stat-value">7</div><div class="stat-trend negative">Needs human sign-off</div></div><div class="stat-card"><div class="stat-label">Incidents</div><div class="stat-value">2</div><div class="stat-trend negative">1 critical outage</div></div><div class="stat-card"><div class="stat-label">Council Debates</div><div class="stat-value">4</div><div class="stat-trend neutral">2 strategic, 2 operational</div></div></div><div class="main-grid"><div class="card"><div class="card-title">Live Empire Feed</div><div id="feed"></div></div><div class="card"><div class="card-title">Command Priorities</div><div class="list"><div>🚨 Acme Corp internet outage triage</div><div>⚖️ War Council: EU expansion risk</div><div>💡 Opportunity Council: property management SaaS</div><div>🔐 M365 security update approval</div></div></div></div></section>
+<section id="view-governance" class="view-section"><div class="card"><div class="card-header"><div><div class="card-title">Governance & Human Approval Rules</div><div class="card-subtitle">Agents may execute low-risk tasks automatically. Sensitive actions route here first.</div></div></div><div class="rules-grid"><div class="rule-card danger"><h3>Always Requires Approval</h3><p>Spending above set budget/profit reinvestment policy, contacting clients, changing client systems, sending emails, buying domains, deploying code, accessing sensitive data, changing Microsoft 365 settings.</p></div><div class="rule-card warning"><h3>Council Review First</h3><p>Strategic pivots, legal ambiguity, brand risk, security-sensitive decisions, new business launches, major operational changes, and anything with high downside risk.</p></div><div class="rule-card success"><h3>Auto-Execute Allowed</h3><p>Internal notes, drafts, summaries, diagnostics, classification, report creation, task routing, status tagging, non-destructive checks, and low-risk internal workflow updates.</p></div></div><h3 class="section-title">Autonomy Levels</h3><div class="timeline"><span>L0 Observe</span><span>L1 Draft</span><span>L2 Low-risk Execute</span><span>L3 Controlled External</span><span>L4 Approval Required</span><span>L5 Emergency Playbooks</span></div></div></section>
+<section id="view-build" class="view-section"><div class="card"><div class="card-title">Production Build Plan</div><div class="roadmap"><div><b>Phase 1</b><p>Clickable prototype and product blueprint.</p></div><div><b>Phase 2</b><p>Real database, event model, mock agents, auth, logs.</p></div><div><b>Phase 3</b><p>Eero/OVRC/Microsoft 365 monitoring connectors.</p></div><div><b>Phase 4</b><p>War Council and Opportunity Council orchestration.</p></div><div><b>Phase 5</b><p>Production multi-agent workforce with approvals and audit trails.</p></div><div><b>Phase 6</b><p>AI-run business factory and family automation operating system.</p></div></div><h3 class="section-title">Recommended Stack</h3><p class="muted">Next.js/React frontend, Postgres, Redis/queue layer, Python/FastAPI agent services, LangGraph-style orchestration, event sourcing/audit logs, OAuth/API connectors, role-based permissions, encrypted secrets vault.</p></div></section>
+<section id="view-approvals" class="view-section"><div class="card"><div class="card-title">Approval Inbox</div><div id="approvalList"></div></div></section>
+<section id="view-agents" class="view-section"><div class="card"><div class="card-title">Agent Registry</div><div id="agentRegistry" class="agent-grid"></div></div></section>
+</main>
+<script>
+const companies=[
+{name:'Holding Company HQ',icon:'🏛️',status:'Operational',badge:'success',agents:18,desc:'Executive command, governance, finance, strategy, legal, and approval routing.',rooms:[['Executive Office','exec',3],['Finance','finance',2],['Legal / Risk','legal',3],['War Council Chamber','council',6],['Approval Queue','ops',4],['Strategy Room','research',3]]},
+{name:'Network Guardian Co',icon:'📡',status:'1 Critical Alert',badge:'danger',agents:16,desc:'Client network monitoring for Eero Insight, OVRC, and Microsoft 365 outages.',rooms:[['NOC / Monitoring','monitoring',5],['Incident Response','ops',4],['Microsoft 365 Security','engineering',3],['Client Communications','ops',2],['Engineering','engineering',3],['Approval Queue','legal',2]]},
+{name:'AI Opportunity Lab',icon:'💡',status:'Researching',badge:'info',agents:14,desc:'Finds, debates, validates, and scores AI-driven business opportunities.',rooms:[['Market Research','research',4],['Financial Modeling','finance',3],['Competition Analysis','research',3],['Opportunity Council','council',8],['Risk Review','risk',2],['Idea Pipeline','ops',4]]},
+{name:'Venture Builder Studio',icon:'🏗️',status:'Building',badge:'success',agents:10,desc:'Turns approved opportunities into real products, services, and companies.',rooms:[['Product','exec',2],['Engineering','engineering',5],['Growth','ops',3],['QA Lab','engineering',2],['Launch Room','research',3],['Finance','finance',2]]},
+{name:'Personal Life Automation',icon:'🏡',status:'Operational',badge:'success',agents:6,desc:'Family support, scheduling, home automation, reminders, and personal productivity.',rooms:[['Family Ops','ops',3],['Scheduling','ops',2],['Home Automation','engineering',2],['Research Desk','research',1],['Finance Helper','finance',1],['Personal Chief of Staff','exec',1]]}
+];
+const statuses=['working','thinking','waiting','alerting','blocked','debating','idle'];
+const statusText={working:'Working',thinking:'Thinking',waiting:'Waiting Approval',alerting:'Incident',blocked:'Blocked',debating:'Debating',idle:'Idle'};
+function clsByDept(d){return 'avatar-'+({exec:'exec',finance:'finance',ops:'ops',engineering:'engineering',monitoring:'monitoring',council:'council',legal:'legal',risk:'risk',research:'research'}[d]||'ops')}
+function renderEmpire(){document.getElementById('empire').innerHTML=companies.map((c,i)=>`<div class="company-tower" onclick="enterCompany(${i})"><div class="tower-icon">${c.icon}</div><div class="tower"><i></i><i></i><i class="${c.badge==='danger'?'hot':''}"></i><i></i><i></i><i></i></div><h3>${c.name}</h3><p>${c.agents} agents • ${c.status}</p><small>Click to enter building</small></div>`).join('')}
+function enterCompany(i){const c=companies[i];document.getElementById('empire').classList.add('hidden');document.getElementById('floorMode').classList.remove('hidden');floorName.textContent=c.name+' — Live Operations Floor';floorDesc.textContent=c.desc;floorBadge.textContent=c.status;floorBadge.className='badge badge-'+c.badge;rooms.innerHTML=c.rooms.map((r,ri)=>roomHTML(c,r,ri)).join('');inspect.innerHTML=`<div class="big-icon">${c.icon}</div><h4>${c.name}</h4><p>${c.desc}</p><p><b>${c.agents}</b> agents active across ${c.rooms.length} departments.</p>`}
+function roomHTML(c,r,ri){let [name,dept,count]=r;let agents='';for(let j=0;j<count;j++){let st=statuses[(ri+j)%statuses.length]; if(c.status.includes('Critical')&&ri==0&&j==0)st='alerting';agents+=`<div class="desk" onclick="event.stopPropagation();selectDesk('${name}','${dept}')"><div class="desk-top"></div><div class="agent-avatar ${clsByDept(dept)} ${st}" title="${name} Agent" onclick="event.stopPropagation();selectAgent('${name} Agent ${j+1}','${name}','${dept}','${st}')"><span class="pixel-face"></span></div></div>`}return `<div class="office-room ${dept}" onclick="selectRoom('${name}','${dept}',${count})"><div class="room-label">${name}</div><div class="desk-grid">${agents}</div></div>`}
+function backToEmpire(){document.getElementById('empire').classList.remove('hidden');document.getElementById('floorMode').classList.add('hidden')}
+function selectRoom(name,dept,count){inspect.innerHTML=`<div class="big-icon">🚪</div><h4>${name}</h4><p>${count} agents working in this department.</p><p>Department type: <b>${dept}</b></p><div class="approval-actions"><button class="btn btn-primary btn-sm">Assign Goal</button><button class="btn btn-ghost btn-sm">View Logs</button><button class="btn btn-ghost btn-sm">Summon Agents</button></div>`}
+function selectDesk(name,dept){inspect.innerHTML=`<div class="big-icon">🖥️</div><h4>${name} Workstation</h4><p>Desk/workstation model: agents have home terminals but can move to councils, incident rooms, and approval queues.</p>`}
+function selectAgent(agent,room,dept,st){inspect.innerHTML=`<div class="big-icon">🤖</div><h4>${agent}</h4><p>${room} • ${statusText[st]}</p><p>Current task: ${st==='alerting'?'Investigating incident and preparing escalation':st==='waiting'?'Waiting for your approval before continuing':st==='blocked'?'Blocked by dependency or policy gate':'Executing assigned work package'}.</p><p>Autonomy: Level 2 by default; sensitive actions route to human approval.</p><div class="approval-actions"><button class="btn btn-primary btn-sm">Open Agent</button><button class="btn btn-ghost btn-sm">Assign Task</button><button class="btn btn-ghost btn-sm">View Logs</button><button class="btn btn-danger btn-sm">Pause</button></div>`}
+function renderFeed(){feed.innerHTML=['Network Guardian Co: Acme Corp internet outage detected','War Council: EU expansion debate moved to voting','Opportunity Lab: property management SaaS scored 82/100','CFO Agent: SaaS subscription over budget queued for approval','M365 Monitor: Exchange degradation under observation'].map(x=>`<div class="alert-item info"><div class="alert-description">${x}</div></div>`).join('')}
+function renderApprovals(){approvalList.innerHTML=['Spend $299/mo on accounting automation','Send client maintenance email','Apply Microsoft 365 security setting','Buy secure-ai-guardian.com domain','Deploy monitoring connector to production','Access sensitive client logs','Change client network configuration'].map((x,i)=>`<div class="approval-action"><div class="approval-header"><div><div class="approval-action-title">${x}</div><div class="approval-meta">Requested by ${i%2?'Operations Agent':'Council Agent'} • Risk: ${i<3?'High':'Medium'}</div></div><span class="badge ${i<3?'badge-danger':'badge-warning'}">Approval Required</span></div><div class="approval-actions"><button class="btn btn-success btn-sm">Approve</button><button class="btn btn-danger btn-sm">Reject</button><button class="btn btn-ghost btn-sm">More Info</button></div></div>`).join('')}
+function renderAgents(){let arr=[];companies.forEach(c=>c.rooms.forEach(r=>arr.push({c:c.name,room:r[0],dept:r[1],n:r[2]})));agentRegistry.innerHTML=arr.map(a=>`<div class="agent-card"><div class="agent-role">${a.room} Agents</div><div class="agent-function">${a.c} • ${a.n} active agents</div><div class="agent-status"><span class="status-dot online"></span> Online</div></div>`).join('')}
+document.querySelectorAll('.nav-tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.nav-tab,.view-section').forEach(e=>e.classList.remove('active'));t.classList.add('active');document.getElementById('view-'+t.dataset.view).classList.add('active')});
+setInterval(()=>clock.textContent=new Date().toLocaleTimeString(),1000);renderEmpire();renderFeed();renderApprovals();renderAgents();
+</script>
+</body></html>
